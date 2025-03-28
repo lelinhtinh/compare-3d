@@ -1,0 +1,12 @@
+import { z } from 'zod';
+import { UnitEnum } from './types';
+
+export const productSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  width: z.number().positive('Width must be positive').nullable(),
+  height: z.number().positive('Height must be positive').nullable(),
+  length: z.number().positive('Length must be positive').nullable(),
+  unit: z.nativeEnum(UnitEnum).default(UnitEnum.mm),
+  color: z.string().optional(),
+  sortable: z.boolean().default(false),
+});
