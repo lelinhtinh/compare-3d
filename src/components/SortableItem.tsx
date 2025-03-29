@@ -1,4 +1,5 @@
 import { SortableItemProps } from '@/common/types';
+import { Separator } from '@/components/ui/separator';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, SquarePen, X } from 'lucide-react';
@@ -21,19 +22,22 @@ function SortableItem({ product, onEdit, onRemove }: SortableItemProps) {
       className="flex justify-between items-center p-2 border-b"
     >
       <div className="relative">
-        <span
+        <div
           {...attributes}
           {...listeners}
           className="cursor-grab absolute left-0"
         >
           <GripVertical />
-        </span>
-        <span className="ml-8">
-          {product.name} - {product.width}x{product.height}x{product.length}{' '}
-          {product.unit}
-        </span>
+        </div>
+        <div className="ml-8 flex h-5 items-center space-x-4 text-sm">
+          <strong>{product.name}</strong>
+          <Separator orientation="vertical" />
+          <span className="text-gray-500">
+            {product.width}x{product.height}x{product.length} {product.unit}
+          </span>
+        </div>
       </div>
-      <span>
+      <div className="text-nowrap">
         <Button
           variant="outline"
           size="icon"
@@ -52,7 +56,7 @@ function SortableItem({ product, onEdit, onRemove }: SortableItemProps) {
         >
           <X />
         </Button>
-      </span>
+      </div>
     </li>
   );
 }

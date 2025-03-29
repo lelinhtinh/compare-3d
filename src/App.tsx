@@ -1,3 +1,9 @@
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable';
+import { Separator } from '@/components/ui/separator';
 import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
@@ -5,16 +11,11 @@ import { parseAsArrayOf, parseAsJson, useQueryState } from 'nuqs';
 import { useState } from 'react';
 import { productSchema } from './common/schemas';
 import { Product } from './common/types';
+import { ModeToggle } from './components/ModeToggle';
 import Preview from './components/Preview';
 import { ProductForm } from './components/ProductForm';
 import SortableItem from './components/SortableItem';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './components/ui/card';
+import { ThemeProvider } from './contexts/ThemeProvider';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
@@ -43,50 +44,59 @@ export default function App() {
   }
 
   return (
-    <div className="flex w-full h-screen">
-      <div className="w-1/3 p-4 bg-gray-100">
-        <Card className="mb-8">
-          <CardHeader className="flex items-stretch">
-            <Avatar className="w-14 size-14 mr-4">
-              <AvatarImage src="/logo.svg" alt="3d" />
-              <AvatarFallback>3d</AvatarFallback>
-            </Avatar>
-            <div className="size-14 grow content-center">
-              <CardTitle>Compare 3D</CardTitle>
-              <CardDescription>
-                Compare the dimensions of products easily.
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ProductForm
-              products={products}
-              setProducts={setProducts}
-              editingProduct={editingProduct}
-            />
-          </CardContent>
-        </Card>
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={products.map((p) => p.name)}>
-            <ul>
-              {products.map((p) => (
-                <SortableItem
-                  key={p.name}
-                  product={p}
-                  onRemove={handleRemove}
-                  onEdit={() => handleEdit(p.name)}
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ResizablePanelGroup direction="horizontal" className="size-full">
+        <ResizablePanel defaultSize={25}>
+          <div className="min-w-sm h-full overflow-x-hidden overflow-y-auto">
+            <div className="p-8">
+              <header className="flex items-stretch mb-4">
+                <Avatar className="w-14 size-14 mr-4">
+                  <AvatarImage src="/logo.svg" alt="3d" />
+                  <AvatarFallback>3d</AvatarFallback>
+                </Avatar>
+                <div className="size-14 grow content-center">
+                  <h1 className="font-semibold">Compare 3D</h1>
+                  <h4 className="tracking-tight text-gray-400">
+                    Compare the dimensions of products easily.
+                  </h4>
+                </div>
+              </header>
+              <section>
+                <ProductForm
+                  products={products}
+                  setProducts={setProducts}
+                  editingProduct={editingProduct}
                 />
-              ))}
-            </ul>
-          </SortableContext>
-        </DndContext>
-      </div>
-      <div className="w-2/3 h-full">
-        <Preview products={products} />
-      </div>
-    </div>
+              </section>
+            </div>
+            <Separator />
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext items={products.map((p) => p.name)}>
+                <ul>
+                  {products.map((p) => (
+                    <SortableItem
+                      key={p.name}
+                      product={p}
+                      onRemove={handleRemove}
+                      onEdit={() => handleEdit(p.name)}
+                    />
+                  ))}
+                </ul>
+              </SortableContext>
+            </DndContext>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75}>
+          <Preview products={products} />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+      <nav className="absolute top-4 right-4">
+        <ModeToggle />
+      </nav>
+    </ThemeProvider>
   );
 }

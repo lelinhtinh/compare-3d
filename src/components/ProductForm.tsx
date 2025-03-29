@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { generateDarkColor } from '@/helpers/generateDarkColor';
+import { generateColor } from '@/helpers/generateColor';
 import { getExistingNames } from '@/helpers/getExistingNames';
 import { sortDimensions } from '@/helpers/sortDimensions';
 import { validateDimensions } from '@/helpers/validateDimensions';
@@ -92,7 +92,7 @@ export function ProductForm({
       const existingColors = prev
         .map((product) => product.color)
         .filter((color): color is string => color !== undefined);
-      const newColor = generateDarkColor(existingColors);
+      const newColor = generateColor(existingColors);
       return [...prev, { ...values, idx: values.name, color: newColor }];
     });
   }
@@ -146,7 +146,7 @@ export function ProductForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Product Name</FormLabel>
+              <FormLabel>Product name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter a unique name" {...field} />
               </FormControl>
