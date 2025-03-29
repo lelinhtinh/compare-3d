@@ -112,6 +112,7 @@ export function ProductForm({
               <Input
                 placeholder={label}
                 type="number"
+                step=".01"
                 {...field}
                 value={field.value ?? ''}
                 onChange={(e) =>
