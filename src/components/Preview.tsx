@@ -1,5 +1,5 @@
-import { calculateSceneParameters } from '@/common/helpers';
-import { Position, PreviewProps } from '@/types';
+import { Position, PreviewProps } from '@/common/types';
+import { calculateSceneParameters } from '@/helpers/calculateSceneParameters';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';

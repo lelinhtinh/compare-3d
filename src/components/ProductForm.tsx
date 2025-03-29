@@ -1,4 +1,5 @@
-import { generateDarkColor, validateDimensions } from '@/common/helpers';
+import { productSchema } from '@/common/schemas';
+import { Product, ProductFormProps, UnitEnum } from '@/common/types';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,16 +17,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { productSchema } from '@/schemas';
-import { Product, ProductFormProps, UnitEnum } from '@/types';
+import { generateDarkColor } from '@/helpers/generateDarkColor';
+import { getExistingNames } from '@/helpers/getExistingNames';
+import { sortDimensions } from '@/helpers/sortDimensions';
+import { validateDimensions } from '@/helpers/validateDimensions';
+import { validateName } from '@/helpers/validateName';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Switch } from './ui/switch';
 
-export function ProductForm({ products, setProducts }: ProductFormProps) {
+export function ProductForm({
+  products,
+  setProducts,
+  editingProduct,
+}: ProductFormProps) {
   const form = useForm<Product>({
     resolver: zodResolver(productSchema),
     defaultValues: {
+      idx: '',
       name: '',
       width: null,
       height: null,
@@ -35,37 +45,56 @@ export function ProductForm({ products, setProducts }: ProductFormProps) {
     },
   });
 
+  useEffect(() => {
+    form.setFocus('name');
+  }, [form]);
+
+  useEffect(() => {
+    form.reset(editingProduct || { sortable: form.getValues('sortable') });
+  }, [form, editingProduct]);
+
   function onSubmit(values: Product) {
-    const existingNames = products.map((product) => product.name) || [];
-
     if (!validateDimensions(form, values)) return;
-
-    if (existingNames.includes(values.name)) {
-      form.setError('name', {
-        type: 'manual',
-        message: 'Product name must be unique',
-      });
+    if (!validateName(form, values, getExistingNames(products, values.idx)))
       return;
+
+    if (values.sortable) sortDimensions(values);
+
+    if (values?.idx) {
+      updateProduct(values);
+    } else {
+      addNewProduct(values);
     }
 
-    if (values.sortable) {
-      const dimensions = [values.width!, values.height!, values.length!].sort(
-        (a, b) => a - b
-      );
-      [values.width, values.height, values.length] = dimensions;
-    }
+    resetFormAndFocus();
+  }
 
+  function resetFormAndFocus() {
+    form.reset({ sortable: form.getValues('sortable') });
+
+    setTimeout(() => {
+      form.setFocus('name');
+    }, 0);
+  }
+
+  function updateProduct(values: Product) {
+    setProducts((prev) =>
+      prev.map((product) =>
+        product.idx === values.idx
+          ? { ...product, ...values, idx: values.name }
+          : product
+      )
+    );
+  }
+
+  function addNewProduct(values: Product) {
     setProducts((prev) => {
       const existingColors = prev
         .map((product) => product.color)
         .filter((color): color is string => color !== undefined);
-
       const newColor = generateDarkColor(existingColors);
-
-      return [...prev, { ...values, color: newColor }];
+      return [...prev, { ...values, idx: values.name, color: newColor }];
     });
-
-    form.reset({ sortable: form.getValues('sortable') });
   }
 
   function renderDimensionField(
@@ -102,6 +131,15 @@ export function ProductForm({ products, setProducts }: ProductFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="idx"
+          render={({ field }) => (
+            <FormControl>
+              <Input type="hidden" {...field} />
+            </FormControl>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"

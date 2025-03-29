@@ -1,10 +1,10 @@
-import { SortableItemProps } from '@/types';
+import { SortableItemProps } from '@/common/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, X } from 'lucide-react';
+import { GripVertical, SquarePen, X } from 'lucide-react';
 import { Button } from './ui/button';
 
-function SortableItem({ product, index, onRemove }: SortableItemProps) {
+function SortableItem({ product, onEdit, onRemove }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: product.name });
 
@@ -20,22 +20,39 @@ function SortableItem({ product, index, onRemove }: SortableItemProps) {
       style={style}
       className="flex justify-between items-center p-2 border-b"
     >
-      <span {...attributes} {...listeners} className="cursor-grab">
-        <GripVertical />
-      </span>
+      <div className="relative">
+        <span
+          {...attributes}
+          {...listeners}
+          className="cursor-grab absolute left-0"
+        >
+          <GripVertical />
+        </span>
+        <span className="ml-8">
+          {product.name} - {product.width}x{product.height}x{product.length}{' '}
+          {product.unit}
+        </span>
+      </div>
       <span>
-        {product.name} - {product.width}x{product.height}x{product.length}{' '}
-        {product.unit}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onEdit(product.name)}
+          className="cursor-pointer hover:text-blue-700 mx-4"
+          aria-label="Edit product"
+        >
+          <SquarePen />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onRemove(product.name)}
+          className="cursor-pointer hover:text-red-700"
+          aria-label="Remove product"
+        >
+          <X />
+        </Button>
       </span>
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => onRemove(index)}
-        className="cursor-pointer hover:text-red-700"
-        aria-label="Remove product"
-      >
-        <X />
-      </Button>
     </li>
   );
 }

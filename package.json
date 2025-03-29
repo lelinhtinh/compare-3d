@@ -2,7 +2,7 @@
   "name": "compare-3d",
   "description": "A comparison tool for visualizing differences in 3D models.",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

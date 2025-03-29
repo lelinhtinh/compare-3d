@@ -2,6 +2,9 @@ import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { parseAsArrayOf, parseAsJson, useQueryState } from 'nuqs';
+import { useState } from 'react';
+import { productSchema } from './common/schemas';
+import { Product } from './common/types';
 import Preview from './components/Preview';
 import { ProductForm } from './components/ProductForm';
 import SortableItem from './components/SortableItem';
@@ -12,16 +15,23 @@ import {
   CardHeader,
   CardTitle,
 } from './components/ui/card';
-import { productSchema } from './schemas';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
     'data',
     parseAsArrayOf(parseAsJson(productSchema.parse)).withDefault([])
   );
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  function handleRemove(index: number) {
-    setProducts(products.filter((_, i) => i !== index));
+  function handleRemove(idx: string) {
+    setProducts(products.filter((p) => p.name !== idx));
+  }
+
+  function handleEdit(idx: string) {
+    const product = products.find((p) => p.name === idx);
+    if (product) {
+      setEditingProduct({ ...product, idx });
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -49,7 +59,11 @@ export default function App() {
             </div>
           </CardHeader>
           <CardContent>
-            <ProductForm products={products} setProducts={setProducts} />
+            <ProductForm
+              products={products}
+              setProducts={setProducts}
+              editingProduct={editingProduct}
+            />
           </CardContent>
         </Card>
         <DndContext
@@ -58,12 +72,12 @@ export default function App() {
         >
           <SortableContext items={products.map((p) => p.name)}>
             <ul>
-              {products.map((p, idx) => (
+              {products.map((p) => (
                 <SortableItem
                   key={p.name}
                   product={p}
-                  index={idx}
                   onRemove={handleRemove}
+                  onEdit={() => handleEdit(p.name)}
                 />
               ))}
             </ul>

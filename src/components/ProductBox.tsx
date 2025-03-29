@@ -1,5 +1,5 @@
-import { convertToMM } from '@/common/utils';
-import { ProductBoxProps } from '@/types';
+import { ProductBoxProps } from '@/common/types';
+import { convertToMM } from '@/utils/convertToMM';
 import { Box, Edges } from '@react-three/drei';
 
 function ProductBox({ product, position, scaleFactor }: ProductBoxProps) {

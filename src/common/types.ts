@@ -15,6 +15,7 @@ export type Product = z.infer<typeof productSchema>;
 export interface ProductFormProps {
   products: Product[];
   setProducts: Dispatch<SetStateAction<Product[]>>;
+  editingProduct?: Product | null;
 }
 
 export interface ProductBoxProps {
@@ -29,10 +30,17 @@ export interface PreviewProps {
 
 export interface SortableItemProps {
   product: Product;
-  index: number;
-  onRemove: (index: number) => void;
+  onRemove: (index: string) => void;
+  onEdit: (index: string) => void;
 }
 
 export interface PreviewProps {
   products: Product[];
+}
+
+export interface UniqolorOptions {
+  format?: 'rgb' | 'hsl' | 'hex';
+  saturation?: number | number[];
+  lightness?: number | number[];
+  differencePoint?: number;
 }
