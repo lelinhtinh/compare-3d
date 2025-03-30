@@ -7,14 +7,19 @@ import { Separator } from '@/components/ui/separator';
 import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { Github } from 'lucide-react';
 import { parseAsArrayOf, parseAsJson, useQueryState } from 'nuqs';
+import packageRepoUrl from 'package-repo-url';
 import { useState } from 'react';
+import packageInfo from '../package.json';
 import { productSchema } from './common/schemas';
 import { Product } from './common/types';
 import { ModeToggle } from './components/ModeToggle';
 import Preview from './components/Preview';
 import { ProductForm } from './components/ProductForm';
 import SortableItem from './components/SortableItem';
+import { Badge } from './components/ui/badge';
+import { Button } from './components/ui/button';
 import { ThemeProvider } from './contexts/ThemeProvider';
 
 export default function App() {
@@ -54,10 +59,28 @@ export default function App() {
                   <AvatarImage src="./logo.svg" alt="3d" />
                   <AvatarFallback>3d</AvatarFallback>
                 </Avatar>
-                <div className="size-14 grow content-center">
-                  <h1 className="font-semibold">Compare 3D</h1>
+                <div className="grow content-center">
+                  <div className="flex items-center flex-row gap-2">
+                    <h1 className="font-semibold">Compare 3D</h1>
+                    <Badge variant="secondary">v{packageInfo.version}</Badge>
+                    <a
+                      href={packageRepoUrl(packageInfo)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-auto"
+                      aria-label="Star on GitHub"
+                    >
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-full cursor-pointer"
+                      >
+                        <Github />
+                      </Button>
+                    </a>
+                  </div>
                   <h4 className="tracking-tight text-gray-400">
-                    Compare the dimensions of products easily.
+                    {packageInfo.description}
                   </h4>
                 </div>
               </header>
