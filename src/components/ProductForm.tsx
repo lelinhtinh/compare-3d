@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { extractDimensionsFromClipboard } from '@/helpers/extractDimensionsFromClipboard';
 import { generateColor } from '@/helpers/generateColor';
 import { getExistingNames } from '@/helpers/getExistingNames';
 import { sortDimensions } from '@/helpers/sortDimensions';
@@ -120,6 +121,16 @@ export function ProductForm({
                     e.target.value ? parseFloat(e.target.value) : undefined
                   )
                 }
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const clipboardData = e.clipboardData
+                    .getData('text/plain')
+                    .toLowerCase()
+                    .trim();
+                  if (!extractDimensionsFromClipboard(form, clipboardData)) {
+                    field.onChange(clipboardData);
+                  }
+                }}
               />
             </FormControl>
             <FormMessage />
