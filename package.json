@@ -2,11 +2,12 @@
   "name": "compare-3d",
   "description": "A comparison tool for visualizing differences in 3D models.",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
+    "prebuild": "rimraf dist",
     "build": "tsc -b && vite build --base=./",
     "lint": "eslint .",
     "preview": "vite preview",

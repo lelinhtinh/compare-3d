@@ -51,7 +51,7 @@ export default function App() {
             <div className="p-8">
               <header className="flex items-stretch mb-4">
                 <Avatar className="w-14 size-14 mr-4">
-                  <AvatarImage src="/logo.svg" alt="3d" />
+                  <AvatarImage src="./logo.svg" alt="3d" />
                   <AvatarFallback>3d</AvatarFallback>
                 </Avatar>
                 <div className="size-14 grow content-center">
