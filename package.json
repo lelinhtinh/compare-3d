@@ -2,7 +2,7 @@
   "name": "compare-3d",
   "description": "Compare multiple product sizes using 3D blocks",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "license": "MIT",
   "repository": {

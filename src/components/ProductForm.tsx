@@ -191,7 +191,7 @@ export function ProductForm({
             render={({ field }) => (
               <FormItem className="flex items-center space-x-2">
                 <FormLabel htmlFor="sort-dimensions" className="mb-0">
-                  Sort Dimensions
+                  Sort dimensions
                 </FormLabel>
                 <FormControl>
                   <Switch

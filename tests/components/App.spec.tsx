@@ -3,6 +3,7 @@ import App from '@/App';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
+import { description } from '../../package.json';
 
 vi.mock('nuqs', () => {
   return {
@@ -21,9 +22,7 @@ describe('App', () => {
   it('renders header with title and subtitle', async () => {
     const { getByText } = render(<App />);
     await expect.element(getByText('Compare 3D')).toBeInTheDocument();
-    await expect
-      .element(getByText('Compare the dimensions of products easily'))
-      .toBeInTheDocument();
+    await expect.element(getByText(description)).toBeInTheDocument();
   });
 
   it('renders ModeToggle in the navigation', async () => {
@@ -60,7 +59,7 @@ describe('App', () => {
       .element(getByPlaceholder('Enter a unique name'))
       .toHaveValue('Test Product');
     await getByPlaceholder('Enter a unique name').fill('Modified Product');
-    await getByLabelText('Sort Dimensions').click();
+    await getByLabelText('Sort dimensions').click();
     await getByText('Submit').click();
 
     await expect.element(getByText('Modified Product')).toBeInTheDocument();
