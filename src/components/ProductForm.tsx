@@ -163,10 +163,10 @@ export function ProductForm({
             name="unit"
             render={({ field }) => (
               <FormItem className="place-self-end">
-                <FormLabel>Unit</FormLabel>
+                <FormLabel htmlFor="select_unit">Unit</FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger id="select_unit">
                       <SelectValue placeholder="Select Unit" />
                     </SelectTrigger>
                     <SelectContent>

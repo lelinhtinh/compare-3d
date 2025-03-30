@@ -7,11 +7,11 @@ import { Separator } from '@/components/ui/separator';
 import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import gh from 'github-url-from-git';
 import { Github } from 'lucide-react';
 import { parseAsArrayOf, parseAsJson, useQueryState } from 'nuqs';
-import packageRepoUrl from 'package-repo-url';
 import { useState } from 'react';
-import packageInfo from '../package.json';
+import { description, repository, version } from '../package.json';
 import { productSchema } from './common/schemas';
 import { Product } from './common/types';
 import { ModeToggle } from './components/ModeToggle';
@@ -21,6 +21,7 @@ import SortableItem from './components/SortableItem';
 import { Badge } from './components/ui/badge';
 import { Button } from './components/ui/button';
 import { ThemeProvider } from './contexts/ThemeProvider';
+import logo from '/logo.svg?url';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
@@ -56,18 +57,18 @@ export default function App() {
             <div className="p-8">
               <header className="flex items-stretch mb-4">
                 <Avatar className="w-14 size-14 mr-4">
-                  <AvatarImage src="./logo.svg" alt="3d" />
+                  <AvatarImage src={logo} alt="3d" />
                   <AvatarFallback>3d</AvatarFallback>
                 </Avatar>
                 <div className="grow content-center">
                   <div className="flex items-center flex-row gap-2">
                     <h1 className="font-semibold">Compare 3D</h1>
-                    <Badge variant="secondary">v{packageInfo.version}</Badge>
+                    <Badge variant="secondary">v{version}</Badge>
                     <a
-                      href={packageRepoUrl(packageInfo)}
+                      href={gh(repository.url)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-auto"
+                      className={navigator.onLine ? 'ml-auto' : ' hidden'}
                       aria-label="Star on GitHub"
                     >
                       <Button
@@ -80,7 +81,7 @@ export default function App() {
                     </a>
                   </div>
                   <h4 className="tracking-tight text-gray-400">
-                    {packageInfo.description}
+                    {description}
                   </h4>
                 </div>
               </header>
