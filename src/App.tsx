@@ -21,13 +21,13 @@ import SortableItem from './components/SortableItem';
 import { Badge } from './components/ui/badge';
 import { Button } from './components/ui/button';
 import { ThemeProvider } from './contexts/ThemeProvider';
-import { parseAsBase64 } from './utils/parseAsBase64';
+import { parseProductAsTuple } from './helpers/parseProductAsTuple';
 import logo from '/logo.svg?url';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
     'data',
-    parseAsArrayOf(parseAsBase64(productSchema.parse), ';')
+    parseAsArrayOf(parseProductAsTuple(productSchema.parse), ';')
       .withDefault([])
       .withOptions({ history: 'push' })
   );
