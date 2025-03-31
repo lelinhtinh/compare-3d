@@ -165,7 +165,7 @@ export function ProductForm({
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-3 gap-4 w-full sm:grid-cols-4">
+        <div className="grid grid-cols-3 gap-4 w-full sm:grid-cols-4 mb-0">
           {renderDimensionField('width', 'Width')}
           {renderDimensionField('height', 'Height')}
           {renderDimensionField('length', 'Length')}
@@ -193,6 +193,11 @@ export function ProductForm({
               </FormItem>
             )}
           />
+        </div>
+        <div className="mt-2">
+          <p className="text-xs text-muted-foreground">
+            Enter a number or paste dimensions in the format: 10x20x30mm
+          </p>
         </div>
         <div className="flex items-center justify-between">
           <Button type="submit">Submit</Button>

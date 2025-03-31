@@ -9,7 +9,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import gh from 'github-url-from-git';
 import { Github } from 'lucide-react';
-import { parseAsArrayOf, parseAsJson, useQueryState } from 'nuqs';
+import { parseAsArrayOf, useQueryState } from 'nuqs';
 import { useState } from 'react';
 import { description, repository, version } from '../package.json';
 import { productSchema } from './common/schemas';
@@ -21,12 +21,15 @@ import SortableItem from './components/SortableItem';
 import { Badge } from './components/ui/badge';
 import { Button } from './components/ui/button';
 import { ThemeProvider } from './contexts/ThemeProvider';
+import { parseAsBase64 } from './utils/parseAsBase64';
 import logo from '/logo.svg?url';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
     'data',
-    parseAsArrayOf(parseAsJson(productSchema.parse)).withDefault([])
+    parseAsArrayOf(parseAsBase64(productSchema.parse), ';')
+      .withDefault([])
+      .withOptions({ history: 'push' })
   );
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -49,6 +52,11 @@ export default function App() {
     setProducts(arrayMove(products, oldIndex, newIndex));
   }
 
+  function handleClear() {
+    setProducts(null);
+    setEditingProduct(null);
+  }
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <ResizablePanelGroup direction="horizontal" className="size-full">
@@ -56,7 +64,10 @@ export default function App() {
           <div className="min-w-sm h-full overflow-x-hidden overflow-y-auto">
             <div className="p-8">
               <header className="flex items-stretch mb-4">
-                <Avatar className="w-14 size-14 mr-4">
+                <Avatar
+                  className="w-14 size-14 mr-4 cursor-no-drop"
+                  onClick={handleClear}
+                >
                   <AvatarImage src={logo} alt="3d" />
                   <AvatarFallback>3d</AvatarFallback>
                 </Avatar>

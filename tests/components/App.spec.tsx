@@ -8,9 +8,12 @@ import { description } from '../../package.json';
 vi.mock('nuqs', () => {
   return {
     parseAsArrayOf: () => ({
-      withDefault: (defaultValue: any) => defaultValue,
+      withDefault: (defaultValue: any) => ({
+        withOptions: (_opts: any) => defaultValue,
+      }),
     }),
-    parseAsJson: (schema: any) => schema,
+    createParser: (obj: any) => obj,
+    parseAsBase64: (schema: any) => schema,
     useQueryState: (_key: string, parser: any) => {
       const [state, setState] = useState(parser);
       return [state, setState];
