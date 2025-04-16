@@ -113,7 +113,7 @@ export function ProductForm({
               <Input
                 placeholder={label}
                 type="number"
-                step=".01"
+                step=".001"
                 {...field}
                 value={field.value ?? ''}
                 onChange={(e) =>
@@ -165,7 +165,7 @@ export function ProductForm({
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-3 gap-4 w-full sm:grid-cols-4 mb-0">
+        <div className="grid grid-cols-4 gap-4 w-full sm:grid-cols-4 mb-0">
           {renderDimensionField('width', 'Width')}
           {renderDimensionField('height', 'Height')}
           {renderDimensionField('length', 'Length')}

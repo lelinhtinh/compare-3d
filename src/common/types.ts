@@ -57,3 +57,8 @@ export type ThemeProviderState = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 };
+
+export interface SettingProps {
+  products: Product[];
+  setProducts: Dispatch<SetStateAction<Product[]>>;
+}
