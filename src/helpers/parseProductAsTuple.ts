@@ -23,7 +23,7 @@ export function parseProductAsTuple(
           sortable: sortable === 'true',
         };
         return runtimeParser(obj);
-      } catch (_error) {
+      } catch {
         return null;
       }
     },

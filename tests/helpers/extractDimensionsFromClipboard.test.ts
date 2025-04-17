@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UnitEnum } from '@/common/types';
 import { extractDimensionsFromClipboard } from '@/helpers/extractDimensionsFromClipboard';
 import { beforeEach, describe, expect, it, vi } from 'vitest';

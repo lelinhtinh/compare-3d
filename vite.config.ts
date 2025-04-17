@@ -1,12 +1,14 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig, type PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    visualizer({ open: true }) as PluginOption,
     react(),
     tailwindcss(),
     VitePWA({
