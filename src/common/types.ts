@@ -18,24 +18,20 @@ export interface ProductFormProps {
   editingProduct?: Product | null;
 }
 
+export type SettingProps = Omit<ProductFormProps, 'editingProduct'>;
+
+export type PreviewProps = Pick<ProductFormProps, 'products'>;
+
 export interface ProductBoxProps {
   product: Product;
   position: Position;
   scaleFactor: number;
 }
 
-export interface PreviewProps {
-  products: Product[];
-}
-
 export interface SortableItemProps {
   product: Product;
   onRemove: (index: string) => void;
   onEdit: (index: string) => void;
-}
-
-export interface PreviewProps {
-  products: Product[];
 }
 
 export interface UniqolorOptions {
@@ -57,8 +53,3 @@ export type ThemeProviderState = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 };
-
-export interface SettingProps {
-  products: Product[];
-  setProducts: Dispatch<SetStateAction<Product[]>>;
-}

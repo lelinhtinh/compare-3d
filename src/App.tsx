@@ -1,8 +1,9 @@
+import { productSchema } from '@/common/schemas';
+import { parseProductAsTuple } from '@/helpers/parseProductAsTuple';
 import { Cog } from 'lucide-react';
 import { parseAsArrayOf, useQueryState } from 'nuqs';
 import { useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
-import { productSchema } from './common/schemas';
 import Preview from './components/Preview';
 import { Setting } from './components/Setting';
 import { Button } from './components/ui/button';
@@ -18,7 +19,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from './components/ui/resizable';
-import { parseProductAsTuple } from './helpers/parseProductAsTuple';
 
 export default function App() {
   const [products, setProducts] = useQueryState(
