@@ -7,7 +7,7 @@ export function parseAsBase64<T>(runtimeParser: (value: unknown) => T) {
       try {
         const obj = JSON.parse(base64ToString(query));
         return runtimeParser(obj);
-      } catch (_error) {
+      } catch {
         return null;
       }
     },
