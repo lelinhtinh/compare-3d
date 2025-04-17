@@ -24,6 +24,7 @@ import { sortDimensions } from '@/helpers/sortDimensions';
 import { validateDimensions } from '@/helpers/validateDimensions';
 import { validateName } from '@/helpers/validateName';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Baseline } from 'lucide-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Switch } from './ui/switch';
@@ -33,6 +34,7 @@ export function ProductForm({
   setProducts,
   editingProduct,
 }: ProductFormProps) {
+  const newColor = generateUniqueColor();
   const form = useForm<Product>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -43,6 +45,7 @@ export function ProductForm({
       length: null,
       unit: UnitEnum.mm,
       sortable: false,
+      color: newColor,
     },
   });
 
@@ -53,6 +56,13 @@ export function ProductForm({
   useEffect(() => {
     form.reset(editingProduct || { sortable: form.getValues('sortable') });
   }, [form, editingProduct]);
+
+  function generateUniqueColor() {
+    const existingColors = products
+      .map((product) => product.color)
+      .filter((color): color is string => color !== undefined);
+    return generateColor(existingColors);
+  }
 
   function onSubmit(values: Product) {
     if (!validateDimensions(form, values)) return;
@@ -71,8 +81,10 @@ export function ProductForm({
   }
 
   function resetFormAndFocus() {
-    form.reset({ sortable: form.getValues('sortable') });
-
+    form.reset({
+      sortable: form.getValues('sortable'),
+      color: generateUniqueColor(),
+    });
     setTimeout(() => {
       form.setFocus('name');
     }, 0);
@@ -90,11 +102,7 @@ export function ProductForm({
 
   function addNewProduct(values: Product) {
     setProducts((prev) => {
-      const existingColors = prev
-        .map((product) => product.color)
-        .filter((color): color is string => color !== undefined);
-      const newColor = generateColor(existingColors);
-      return [...prev, { ...values, idx: values.name, color: newColor }];
+      return [...prev, { ...values, idx: values.name }];
     });
   }
 
@@ -158,9 +166,45 @@ export function ProductForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Product name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter a unique name" {...field} />
-              </FormControl>
+              <div className="flex items-center gap-2">
+                <FormControl>
+                  <Input placeholder="Enter a unique name" {...field} />
+                </FormControl>
+                <FormField
+                  control={form.control}
+                  name="color"
+                  render={({ field: colorField }) => (
+                    <FormItem className="mb-0">
+                      <FormControl>
+                        <label>
+                          <input
+                            type="color"
+                            className="sr-only"
+                            name="color"
+                            value={colorField.value || newColor}
+                            onChange={(e) =>
+                              colorField.onChange(e.target.value)
+                            }
+                            tabIndex={-1}
+                          />
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="outline"
+                            className="cursor-pointer"
+                            style={{ background: colorField.value || newColor }}
+                            asChild
+                          >
+                            <span>
+                              <Baseline />
+                            </span>
+                          </Button>
+                        </label>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormMessage />
             </FormItem>
           )}

@@ -5,7 +5,7 @@ const COLOR_CONFIG: UniqolorOptions = {
   format: 'hex',
 };
 
-export function generateColor(existingColors: string[]): string {
+export function generateColor(existingColors: string[] = []): string {
   function createColor(): string | null {
     const { color } = uniqolor.random(COLOR_CONFIG);
     return color;
